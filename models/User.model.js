@@ -15,8 +15,7 @@ const userSchema = new Schema({
     require: true
   },
   lastName: {
-    type:String,
-    require: true
+    type:String
   }, 
   resume: [String],
   jobId: {
