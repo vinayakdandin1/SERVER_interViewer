@@ -11,11 +11,11 @@ router.post('/signup', (req, res) => {
     // console.log(username, email, password);
  
     // -----SERVER SIDE VALIDATION ----------
-  
+
     if (!emailId || !password || !firstName || !lastName) {
         res.status(500)
           .json({
-            errorMessage: 'Please enter username, email and password'
+            errorMessage: 'Please enter emailId, password, firstName and lastName'
           });
         return;  
     }
