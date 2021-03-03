@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose")
 
-// TODO: Please make sure you edit the user model to whatever makes sense in this case
 const userSchema = new Schema({
   emailId: {
     type: String,
@@ -18,7 +18,11 @@ const userSchema = new Schema({
     type:String,
     require: true
   }, 
-  resume: []
+  resume: [String],
+  jobId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'job'
+  }
 });
 
 const User = model("user", userSchema);

@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
 const mongoose = require("mongoose")
 
-// TODO: Please make sure you edit the user model to whatever makes sense in this case
 const jobSchema = new Schema({
   
 jobTitle: {
@@ -23,10 +22,13 @@ companyRating: String,
 applicationLink: String,
 sourceOfApplication: String,
 salary: Number,
-userId: {
+interviewDate: Date,
+jobLocation: String,
+statusId: {
   type: mongoose.Schema.Types.ObjectId,
-  ref: 'user'
+  ref: 'state'
 }
+
 });
 
 const Jobs = model("job", jobSchema);
