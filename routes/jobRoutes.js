@@ -5,7 +5,7 @@ let UserModel = require("../models/User.model")
 
 //To check User is Logged in -------------------------------------------------------------------->
 const isLoggedIn = (req, res, next) => {  
-  if (req.session.loggedInUser) {
+  if (req.session.user) {
       //calls whatever is to be executed after the isLoggedIn function is over
       next()
   }
@@ -21,7 +21,7 @@ const isLoggedIn = (req, res, next) => {
 
 router.get("/home", isLoggedIn, (req, res, next) => {
   
-  let user = req.session.loggedInUser._id
+  let user = req.session.user._id
 
   UserModel.findOne(user)
     .populate("jobId")
@@ -40,7 +40,7 @@ router.get("/home", isLoggedIn, (req, res, next) => {
 // Get route to show dashboard of the user with job list on left and form on right -------------->
 router.get("/dashboard", isLoggedIn, (req, res, next) => {
   
-  let user = req.session.loggedInUser._id
+  let user = req.session.user._id
   UserModel.find(user)
     .populate("jobId")
     .then((jobList) => {
@@ -180,7 +180,7 @@ router.delete("home/:statusId", isLoggedIn, (req, res, next) => {
 // Get route to take the user to profile where he can check his detils and a list of user Resumes ------------------>
 router.get("/profile", isLoggedIn,  (req, res, next) => {
 
-  let user = req.session.loggedInUser._id
+  let user = req.session.user._id
 
   UserModel.findOne(user)
     then((response) => {
@@ -193,5 +193,7 @@ router.get("/profile", isLoggedIn,  (req, res, next) => {
       })
     })
 })
+
+
 
 module.exports = router;
