@@ -58,10 +58,26 @@ router.get("/dashboard", isLoggedIn, (req, res, next) => {
 
 //Post route to create a new Job listing to show on the left component of the dashboard page ---------->
 
-router.post("/create", isLoggedIn, (req, res, next) => {
+router.post("/create",(req, res, next) => {
 
-  const {newJobPost:  {jobTitle, companyName, applicationDate, contactPerson, contactDetail, jobDescription, companyRating,
-     applicationLink, sourceOfApplication, resume, salary, interviewDate,jobLocation } } = req.body
+  const {jobTitle, companyName, applicationDate, contactPerson, contactDetail, jobDescription, companyRating,
+    applicationLink, sourceOfApplication, resume, salary, interviewDate, jobLocation } = req.body
+  
+  let newJobPost = {
+    jobTitle,
+    companyName,
+    applicationDate,
+    contactPerson,
+    contactDetail,
+    jobDescription,
+    companyRating,
+    applicationLink,
+    sourceOfApplication,
+    resume,
+    salary,
+    interviewDate,
+    jobLocation,
+  };
 
   JobModel.create(newJobPost)
   .then((response) => {
