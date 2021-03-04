@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 // const mongoose = require("mongoose")
 
-const statusSchema = new Schema({
+const stepSchema = new Schema({
  
   date: {
     type: Date,
@@ -18,6 +18,6 @@ const statusSchema = new Schema({
 
 });
 
-const Status = model("state", statusSchema);
+const Steps = model("step", stepSchema);
 
-module.exports = Status;
+module.exports = Steps;

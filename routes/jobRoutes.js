@@ -1,6 +1,6 @@
 const router = require("express").Router();
 let JobModel = require("../models/Job.model")
-let StatusModel = require("../models/Status.model")
+let StepModel = require("../models/Step.model")
 let UserModel = require("../models/User.model")
 
 //To check User is Logged in -------------------------------------------------------------------->
@@ -76,17 +76,31 @@ router.post("/create", isLoggedIn, (req, res, next) => {
 
 })
 
-//Post route to post comments on the status inside of Job details page ----------------------------------->
-router.post("/create-status", isLoggedIn, (req, res, next) => {
+//Post route to post comments on the step inside of Job details page ----------------------------------->
+
+router.get("/steps", isLoggedIn, (req, res) => {
+  StepModel.find()
+    .then((steps) => {
+      res.status(200).json
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: 'Something went wrong with steps',
+        message: err
+      })
+    })
+})
+
+router.post("/create-step", isLoggedIn, (req, res) => {
   const {date, step} = req.body
 
-  StatusModel.create({date, step})
+  StepModel.create({date, step})
     .then((response) => {
       res.status(200).json(response)
     })
     .catch((err) => {
       res.status(500).json({
-        error: "Something went wrong",
+        error: "Something went wrong with create step",
         message: err
     })
     })
@@ -144,12 +158,12 @@ router.delete("home/:jobId", isLoggedIn, (req, res, next) => {
   })
 })
 
-// Delete path for deleting a status ------------------------------------------------------------------------------->
+// Delete path for deleting a step ------------------------------------------------------------------------------->
 
-router.delete("home/:statusId", isLoggedIn, (req, res, next) => {
-  let id = req.params.statusId
+router.delete("home/:stepId", isLoggedIn, (req, res, next) => {
+  let id = req.params.stepId
 
-  StatusModel.findByIdAndDelete(id)
+  StepModel.findByIdAndDelete(id)
   .then((response) => {
     res.status(200).json(response)
   })
@@ -177,5 +191,7 @@ router.get("/profile", isLoggedIn,  (req, res, next) => {
       })
     })
 })
+
+
 
 module.exports = router;

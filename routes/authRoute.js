@@ -1,14 +1,14 @@
 const express = require('express')
 const router = express.Router()
 
-//we installed bcrypt.js
+//installed bcrypt.js
 const bcrypt = require('bcryptjs');
 
 const UserModel = require('../models/User.model');
 
 router.post('/signup', (req, res) => {
     const {emailId, password, firstName, lastName } = req.body;
-    // console.log(username, email, password);
+    // console.log(emailId, password, firstName,lastName);
  
     // -----SERVER SIDE VALIDATION ----------
 
@@ -34,8 +34,7 @@ router.post('/signup', (req, res) => {
       return;  
     }
     
-
-    // NOTE: We have used the Sync methods here. 
+    // NOTE: Used the Sync methods here. 
     // creating a salt 
     let salt = bcrypt.genSaltSync(10);
     let hash = bcrypt.hashSync(password, salt);
@@ -81,7 +80,6 @@ router.post('/signin', (req, res) => {
         return;  
     }
     
-  
     // Find if the user exists in the database 
     UserModel.findOne({emailId})
       .then((userData) => {
@@ -94,6 +92,7 @@ router.post('/signin', (req, res) => {
                   userData.password = "***";
                   req.session.loggedInUser = userData;
                   res.status(200).json(userData)
+                 
                 }
                 //if passwords do not match
                 else {
