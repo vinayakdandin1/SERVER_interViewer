@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-// const mongoose = require("mongoose")
+const mongoose = require("mongoose")
 
 const stepSchema = new Schema({
  
@@ -7,14 +7,14 @@ const stepSchema = new Schema({
     type: Date,
     require: true
   },
-  step: {
+  description: {
     type: String,
     require: true
   },
-  // jobId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'job'
-  // }
+  jobId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'job'
+   }
 
 });
 

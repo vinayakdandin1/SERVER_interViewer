@@ -58,7 +58,6 @@ router.get("/dashboard", isLoggedIn, (req, res, next) => {
 });
 // GET route to show a preview from the job offers from the dashboard---------------------------->
 router.get("/dashboard/:jobId", isLoggedIn, (req, res, next) => {
-  let user = req.session.user._id;
   let jobId = req.params.jobId
   console.log(jobId)
   JobModel.findById(jobId)
@@ -137,10 +136,10 @@ router.get("/home/:jobId/:steps", (req, res) => {
     })
 })
 
-router.post("/home/:jobId/create-step", (req, res) => {
-  const {date, step} = req.body
+router.post("/home/:jobId/create-steps", (req, res) => {
+  const {date, description} = req.body
 
-  StepModel.create({date, step})
+  StepModel.create({date, description})
     .then((response) => {
       res.status(200).json(response);
     })
@@ -157,11 +156,12 @@ router.post("/home/:jobId/create-step", (req, res) => {
 router.get("/home/:jobId", isLoggedIn, (req, res, next) => {
   let id = req.params.jobId;
 
-  JobModel.findOne(id)
+  JobModel.findById(id)
+    .populate("jobId")
     .then((response) => {
       res.status(200).json(response);
     })
-    .catch((error) => {
+    .catch((err) => {
       res.status(500).json({
         error: "Something went wrong",
         message: err,
