@@ -1,7 +1,7 @@
 const router = require("express").Router();
-let JobModel = require("../models/Job.model");
-let StatusModel = require("../models/Status.model");
-let UserModel = require("../models/User.model");
+let JobModel = require("../models/Job.model")
+let StepModel = require("../models/Step.model")
+let UserModel = require("../models/User.model")
 
 
 
@@ -121,31 +121,47 @@ router.post("/create", (req, res, next) => {
     });
 });
 
-//Post route to post comments on the status inside of Job details page ----------------------------------->
-router.post("/create-step", isLoggedIn, (req, res, next) => {
-  const { date, step } = req.body;
+// get & post routes to creat steps inside of Job details page ----------------------------------->
 
-  StatusModel.create({ date, step })
+router.get("/home/:jobId/:steps", (req, res) => {
+  StepModel.find()
+    .then((steps) => {
+      res.status(200).json
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: 'Something went wrong with steps',
+        message: err
+      })
+    })
+})
+
+router.post("/home/:jobId/create-steps", (req, res) => {
+  const {date, description} = req.body
+
+  StepModel.create({date, description})
     .then((response) => {
       res.status(200).json(response);
     })
     .catch((err) => {
       res.status(500).json({
-        error: "Something went wrong",
-        message: err,
-      });
-    });
-});
+        error: "Something went wrong with create step",
+        message: err
+    })
+    })
+
+})
 
 //get route to display individual job dynamically which contains all the details and the status component ------------->
 router.get("/home/:jobId", isLoggedIn, (req, res, next) => {
   let id = req.params.jobId;
 
-  JobModel.findOne(id)
+  JobModel.findById(id)
+    .populate("jobId")
     .then((response) => {
       res.status(200).json(response);
     })
-    .catch((error) => {
+    .catch((err) => {
       res.status(500).json({
         error: "Something went wrong",
         message: err,
@@ -202,14 +218,31 @@ router.delete("home/:jobId", isLoggedIn, (req, res, next) => {
     });
 });
 
-// Delete path for deleting a status ------------------------------------------------------------------------------->
+// Delete path for deleting a step ------------------------------------------------------------------------------->
 
-router.delete("home/:statusId", isLoggedIn, (req, res, next) => {
-  let id = req.params.statusId;
+router.delete("home/:stepId", isLoggedIn, (req, res, next) => {
+  let id = req.params.stepId
 
-  StatusModel.findByIdAndDelete(id)
-    .then((response) => {
-      res.status(200).json(response);
+  StepModel.findByIdAndDelete(id)
+  .then((response) => {
+    res.status(200).json(response)
+  })
+  .catch(() => {
+    res.status(500).json({
+      error: "Something went wrong",
+      message: err
+  })
+  })
+})
+
+// Get route to take the user to profile where he can check his detils and a list of user Resumes ------------------>
+router.get("/profile", isLoggedIn,  (req, res, next) => {
+
+  let user = req.session.user._id
+
+  UserModel.findOne(user)
+    then((response) => {
+      res.status(200).json(response)
     })
     .catch(() => {
       res.status(500).json({
