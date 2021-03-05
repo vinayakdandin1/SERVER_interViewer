@@ -58,7 +58,6 @@ router.get("/dashboard", isLoggedIn, (req, res, next) => {
 });
 // GET route to show a preview from the job offers from the dashboard---------------------------->
 router.get("/dashboard/:jobId", isLoggedIn, (req, res, next) => {
-  let user = req.session.user._id;
   let jobId = req.params.jobId
   console.log(jobId)
   JobModel.findById(jobId)
