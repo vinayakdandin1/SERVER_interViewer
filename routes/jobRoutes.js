@@ -3,6 +3,11 @@ let JobModel = require("../models/Job.model");
 let StatusModel = require("../models/Status.model");
 let UserModel = require("../models/User.model");
 
+
+
+
+
+
 //To check User is Logged in -------------------------------------------------------------------->
 const isLoggedIn = (req, res, next) => {
   if (req.session.user) {
@@ -17,6 +22,11 @@ const isLoggedIn = (req, res, next) => {
 };
 
 // Get route of Home page where welcome user and upcoming interviews will be displayed ---------->
+
+router.get('/user', isLoggedIn, (req, res, next) => {
+  let user = req.sessions.user
+  res.status(200).json(user);
+})
 
 router.get("/home", isLoggedIn, (req, res, next) => {
   let user = req.session.user._id;
@@ -35,11 +45,25 @@ router.get("/home", isLoggedIn, (req, res, next) => {
 // Get route to show dashboard of the user with job list on left and form on right -------------->
 router.get("/dashboard", isLoggedIn, (req, res, next) => {
   let user = req.session.user._id;
-  JobModel.find()
-    .populate("userId")
+  JobModel.find({ userId: user })
     .then((jobList) => {
-      // console.log("Home works");
       res.status(200).json(jobList);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: "something went wrong",
+        message: err,
+      });
+    });
+});
+// GET route to show a preview from the job offers from the dashboard---------------------------->
+router.get("/dashboard/:jobId", isLoggedIn, (req, res, next) => {
+  let user = req.session.user._id;
+  let jobId = req.params.jobId
+  console.log(jobId)
+  JobModel.findById(jobId)
+    .then((singleJob) => {
+      res.status(200).json(singleJob);
     })
     .catch((err) => {
       res.status(500).json({
