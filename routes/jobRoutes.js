@@ -78,7 +78,7 @@ router.post("/create", isLoggedIn, (req, res, next) => {
 
 // get & post routes to creat steps inside of Job details page ----------------------------------->
 
-router.get("/steps", isLoggedIn, (req, res) => {
+router.get("/home/:jobId/steps", (req, res) => {
   StepModel.find()
     .then((steps) => {
       res.status(200).json
@@ -91,7 +91,7 @@ router.get("/steps", isLoggedIn, (req, res) => {
     })
 })
 
-router.post("/create-step", isLoggedIn, (req, res) => {
+router.post("/home/:jobId/create-step", (req, res) => {
   const {date, step} = req.body
 
   StepModel.create({date, step})
