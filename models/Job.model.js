@@ -27,6 +27,10 @@ jobLocation: String,
 statusId: {
   type: mongoose.Schema.Types.ObjectId,
   ref: 'state'
+  },
+userId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'user'
 }
 
 });
