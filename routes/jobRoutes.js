@@ -24,7 +24,7 @@ router.get("/home", isLoggedIn, (req, res, next) => {
   let user = req.session.user._id
 
   UserModel.findOne(user)
-    .populate("jobId")
+    .populate("job")
     then((response) => {
       res.status(200).json(response)
     })
