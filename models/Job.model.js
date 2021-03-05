@@ -24,6 +24,7 @@ sourceOfApplication: String,
 salary: Number,
 interviewDate: Date,
 jobLocation: String,
+jobOwner: Boolean,
 statusId: {
   type: mongoose.Schema.Types.ObjectId,
   ref: 'state'
