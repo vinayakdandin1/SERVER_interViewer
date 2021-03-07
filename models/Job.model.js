@@ -25,7 +25,7 @@ salary: Number,
 interviewDate: Date,
 jobLocation: String,
 jobOwner: Boolean,
-statusId: {
+stepsId: {
   type: mongoose.Schema.Types.ObjectId,
   ref: 'state'
   },
