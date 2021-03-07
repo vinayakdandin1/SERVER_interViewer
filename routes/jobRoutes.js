@@ -123,10 +123,23 @@ router.post("/create", (req, res, next) => {
 
 // get & post routes to creat steps inside of Job details page ----------------------------------->
 
-router.get("/home/:jobId/:steps", (req, res) => {
+// router.get("/home/:jobId/:steps", (req, res) => {
+//   StepModel.find()
+//     .then((steps) => {
+//       res.status(200).json
+//     })
+//     .catch((err) => {
+//       res.status(500).json({
+//         error: 'Something went wrong with steps',
+//         message: err
+//       })
+//     })
+// })
+
+router.get("/home/steps", (req, res) => {
   StepModel.find()
     .then((steps) => {
-      res.status(200).json
+      res.status(200).json(steps)
     })
     .catch((err) => {
       res.status(500).json({
@@ -136,10 +149,10 @@ router.get("/home/:jobId/:steps", (req, res) => {
     })
 })
 
-router.post("/home/:jobId/create-steps", (req, res) => {
-  const {date, description} = req.body
+router.post("/home/create-steps", (req, res) => {
+  const {date, description, jobId} = req.body
 
-  StepModel.create({date, description})
+  StepModel.create({date, description, jobId})
     .then((response) => {
       res.status(200).json(response);
     })
@@ -149,8 +162,8 @@ router.post("/home/:jobId/create-steps", (req, res) => {
         message: err
     })
     })
-
 })
+
 
 //get route to display individual job dynamically which contains all the details and the status component ------------->
 router.get("/home/:jobId", isLoggedIn, (req, res, next) => {
