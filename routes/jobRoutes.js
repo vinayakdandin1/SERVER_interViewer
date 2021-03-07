@@ -231,7 +231,6 @@ router.get("/home/:jobId", isLoggedIn, (req, res, next) => {
 router.patch("/home/:jobId", isLoggedIn, (req, res, next) => {
   let id = req.params.jobId;
   const {
-    newJobPost: {
       jobTitle,
       companyName,
       applicationDate,
@@ -245,10 +244,26 @@ router.patch("/home/:jobId", isLoggedIn, (req, res, next) => {
       salary,
       interviewDate,
       jobLocation,
-    },
-  } = req.body;
+  } = req.body
 
-  JobModel.findByIdAndUpdate(id, newJobPost, { new: true })
+  let editedJob = {
+    jobTitle,
+    companyName,
+    applicationDate,
+    contactPerson,
+    contactDetail,
+    jobDescription,
+    companyRating,
+    applicationLink,
+    sourceOfApplication,
+    resume,
+    salary,
+    interviewDate,
+    jobLocation,
+    userId: result._id,
+  };
+
+  JobModel.findByIdAndUpdate(id, editedJob, { new: true })
     .then((response) => {
       res.status(200).json(response);
     })
@@ -278,19 +293,5 @@ router.get("/profile", isLoggedIn,  (req, res, next) => {
     });
 });
 
-// Get route to take the user to profile where he can check his detils and a list of user Resumes ------------------>
-router.get("/profile", isLoggedIn, (req, res, next) => {
-  let user = req.session.user._id;
-
-  UserModel.findOne(user);
-  then((response) => {
-    res.status(200).json(response);
-  }).catch((err) => {
-    res.status(500).json({
-      error: "something went wrong",
-      message: err,
-    });
-  });
-});
 
 module.exports = router;
