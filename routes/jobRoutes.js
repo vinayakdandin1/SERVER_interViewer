@@ -164,6 +164,19 @@ router.post("/home/create-steps", (req, res) => {
     })
 })
 
+router.delete('/home/:stepsId', (req, res) => {
+  StepModel.findByIdAndDelete(req.params.stepsId)
+        .then((response) => {
+             res.status(200).json(response)
+        })
+        .catch((err) => {
+             res.status(500).json({
+                  error: 'Something went wrong',
+                  message: err
+             })
+        })  
+})
+
 
 //get route to display individual job dynamically which contains all the details and the status component ------------->
 router.get("/home/:jobId", isLoggedIn, (req, res, next) => {
