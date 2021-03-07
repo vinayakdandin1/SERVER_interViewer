@@ -164,7 +164,6 @@ router.post("/home/create-steps", (req, res) => {
 })
 
 router.delete('/home/:stepsId', (req, res) => {
-  console.log("delete Route:", req.params.stepsId);
   StepModel.findByIdAndDelete(req.params.stepsId)
         .then((response) => {
              res.status(200).json(response)
@@ -195,7 +194,6 @@ router.delete("/home/job/:jobId", isLoggedIn, (req, res, next) => {
 
 router.delete("/home/steps/:jobId", isLoggedIn, (req, res, next) => {
   let id = req.params.jobId;
-  console.log(id);
 
   StepModel.deleteMany({jobId: id})
     .then((response) => {
@@ -231,7 +229,6 @@ router.get("/home/:jobId", isLoggedIn, (req, res, next) => {
 router.patch("/home/:jobId", isLoggedIn, (req, res, next) => {
   let id = req.params.jobId;
   const {
-    newJobPost: {
       jobTitle,
       companyName,
       applicationDate,
@@ -245,10 +242,9 @@ router.patch("/home/:jobId", isLoggedIn, (req, res, next) => {
       salary,
       interviewDate,
       jobLocation,
-    },
-  } = req.body;
-
-  JobModel.findByIdAndUpdate(id, newJobPost, { new: true })
+    } = req.body;
+  JobModel.findByIdAndUpdate(id, {jobTitle,companyName, applicationDate, contactPerson,contactDetail, 
+        jobDescription, companyRating, applicationLink, sourceOfApplication, salary, interviewDate,  jobLocation}, { new: true })
     .then((response) => {
       res.status(200).json(response);
     })
