@@ -278,19 +278,4 @@ router.get("/profile", isLoggedIn,  (req, res, next) => {
     });
 });
 
-// Get route to take the user to profile where he can check his detils and a list of user Resumes ------------------>
-router.get("/profile", isLoggedIn, (req, res, next) => {
-  let user = req.session.user._id;
-
-  UserModel.findOne(user);
-  then((response) => {
-    res.status(200).json(response);
-  }).catch((err) => {
-    res.status(500).json({
-      error: "something went wrong",
-      message: err,
-    });
-  });
-});
-
 module.exports = router;
