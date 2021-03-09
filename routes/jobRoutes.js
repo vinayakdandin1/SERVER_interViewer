@@ -3,11 +3,6 @@ let JobModel = require("../models/Job.model")
 let StepModel = require("../models/Step.model")
 let UserModel = require("../models/User.model")
 
-
-
-
-
-
 //To check User is Logged in -------------------------------------------------------------------->
 const isLoggedIn = (req, res, next) => {
   if (req.session.user) {
@@ -57,6 +52,7 @@ router.get("/dashboard", isLoggedIn, (req, res, next) => {
     });
 });
 // GET route to show a preview from the job offers from the dashboard---------------------------->
+
 router.get("/dashboard/:jobId", isLoggedIn, (req, res, next) => {
   let jobId = req.params.jobId
   JobModel.findById(jobId)

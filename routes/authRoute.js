@@ -1,10 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
+
 //installed bcrypt.js
 const bcrypt = require('bcryptjs');
-
-const UserModel = require('../models/User.model');
+const UserModel = require('../models/User.model')
+const {OAuth2Client} = require('google-auth-library');
+const { response } = require('express');
+const client = new OAuth2Client("787148417509-42sv3s46rvl35qgintd8eo00bqco3p2t.apps.googleusercontent.com")
 
 router.post('/signup', (req, res) => {
     const {emailId, password, firstName, lastName } = req.body;
@@ -58,6 +61,90 @@ router.post('/signup', (req, res) => {
           });
         }
       })
+});
+
+
+router.post('/google/auth', (req, res) => {
+  
+  // console.log(emailId, password, firstName,lastName);
+
+  client.verifyIdToken({idToken: tokenId, audiende: "787148417509-42sv3s46rvl35qgintd8eo00bqco3p2t.apps.googleusercontent.com"}).then(response => {
+    const {email_verified,given_name, family_name, email} = response.payload;
+    if(email_verified) {
+
+      UserModel.findOne({emailId:email})
+          .then((userData) => {
+            res.status(500).json({
+              error: 'Email already exist',
+              message: "Please sign in using the emailId"
+          })
+          return;
+          })
+          //throw an error if the user does not exists 
+          .catch((err) => {
+            let password = email+process.env.JWT_SIGNIN_KEY
+            UserModel.create({firstName: given_name, lastName: family_name, emailId:email, password })
+            .then((user) => {
+              // ensuring that we don't share the hash as well with the user
+              user.password = "***";
+              res.status(200).json(user);
+            })
+            .catch((err) => {
+              if (err.code === 11000) {
+                res.status(500).json({
+                  errorMessage: 'username or email entered already exists!',
+                  message: err,
+                });
+              } 
+              else {
+                res.status(500).json({
+                  errorMessage: 'Something went wrong! Go to sleep!',
+                  message: err,
+                });
+              }
+            })
+          });     
+    }
+
+    // console.log(response.payload);
+  })
+
+
+
+  
+});
+
+router.post('/google/signin', (req, res) => {
+  const {tokenId} = req.body;
+
+  client.verifyIdToken({idToken: tokenId, audiende: "787148417509-42sv3s46rvl35qgintd8eo00bqco3p2t.apps.googleusercontent.com"}).then(response => {
+    const {email_verified, name, email} = response.payload;
+    if(email_verified) {
+        UserModel.findOne({emailId:email})
+          .then((userData) => {
+              //check if passwords match
+              {
+                // req.session is the special object that is available to you
+                
+                req.session.user = userData;
+                res.status(200).json(userData) 
+              }
+          })
+          //throw an error if the user does not exists 
+          .catch((err) => {
+            res.status(500).json({
+                error: 'Email does not exist',
+                message: err
+            })
+            return;  
+          });
+    }
+
+    // console.log(response.payload);
+  })
+
+  // console.log(tokenId);
+  
 });
  
 // will handle all POST requests to http:localhost:5005/api/signin
