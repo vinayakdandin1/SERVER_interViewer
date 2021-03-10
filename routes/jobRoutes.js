@@ -2,9 +2,8 @@ const router = require("express").Router();
 let JobModel = require("../models/Job.model");
 let StepModel = require("../models/Step.model");
 let UserModel = require("../models/User.model");
+let ReferralModel = require("../models/Referral.model")
 const uploader = require("../middlewares/cloudinary.config")
-
-
 
 //To check User is Logged in -------------------------------------------------------------------->
 const isLoggedIn = (req, res, next) => {
@@ -39,6 +38,62 @@ router.get("/home", isLoggedIn, (req, res, next) => {
     });
   });
 });
+
+router.delete('/referral/:referralId', (req, res) => {
+  ReferralModel.findByIdAndDelete(req.params.referralId)
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: "Something went wrong",
+        message: err,
+      });
+    });
+});
+
+router.get("/referrals", isLoggedIn, (req, res, next) => {
+  let user = req.session.user._id;
+
+  ReferralModel.find()
+    .then((referralList) => {
+      res.status(200).json(referralList);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: "something went wrong",
+        message: err,
+      });
+    });
+});
+
+router.post("/referrals", isLoggedIn, (req, res, next) => {
+  let user = req.session.user._id;
+
+  const { jobTitle, companyName, contactPerson, contactDetail, jobDescription, applicationLink, jobLocation,referralEmail } = req.body;
+  let newReferralPost = {
+    jobTitle,
+    companyName,
+    contactPerson,
+    contactDetail,
+    jobDescription,
+    applicationLink,
+    jobLocation,
+    userId: user,
+    referralEmail,
+  };
+  ReferralModel.create(newReferralPost)
+  .then((response) => {
+    res.status(200).json(response);
+  })
+  .catch((err) => {
+    res.status(500).json({
+      error: "Something went wrong",
+      message: err,
+    });
+  });
+
+})
 
 // Get route to show dashboard of the user with job list on left and form on right -------------->
 router.get("/dashboard", isLoggedIn, (req, res, next) => {
