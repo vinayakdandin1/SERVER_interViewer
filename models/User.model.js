@@ -23,6 +23,9 @@ const userSchema = new Schema({
   jobId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'job'
+  },
+  imageProfile: {
+    type: String
   }
 });
 

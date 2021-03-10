@@ -2,6 +2,8 @@ const router = require("express").Router();
 let JobModel = require("../models/Job.model")
 let StepModel = require("../models/Step.model")
 let UserModel = require("../models/User.model")
+const uploader = require("../middlewares/cloudinary.config")
+
 
 //To check User is Logged in -------------------------------------------------------------------->
 const isLoggedIn = (req, res, next) => {
@@ -265,19 +267,21 @@ router.get("/profile", isLoggedIn, (req, res, next) => {
   });
 });
 
-// Get route to take the user to profile where he can check his detils and a list of user Resumes ------------------>
-router.get("/profile", isLoggedIn, (req, res, next) => {
-  let user = req.session.user._id;
+// cloudinary resume get & post route
 
-  UserModel.findOne(user);
-  then((response) => {
-    res.status(200).json(response);
-  }).catch((err) => {
-    res.status(500).json({
-      error: "something went wrong",
-      message: err,
-    });
-  });
-});
+router.post('/profil/resume', uploader.single("imageUrl"), isLoggedIn, (req, res, next) => {
+
+  UserModel.findByIdAndUpdate(req.session.userData._id, {resume: req.file.path})
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: "Something went wrong with create step",
+        message: err
+    })
+    })
+})
+
 
 module.exports = router;
