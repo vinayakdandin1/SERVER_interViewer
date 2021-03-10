@@ -162,7 +162,6 @@ router.post("/home/create-steps", (req, res) => {
     });
 });
 
-
 router.delete('/home/:stepsId', (req, res) => {
   StepModel.findByIdAndDelete(req.params.stepsId)
     .then((response) => {
