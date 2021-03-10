@@ -1,9 +1,9 @@
 const router = require("express").Router();
-
-let JobModel = require("../models/Job.model")
-let StepModel = require("../models/Step.model")
-let UserModel = require("../models/User.model")
+let JobModel = require("../models/Job.model");
+let StepModel = require("../models/Step.model");
+let UserModel = require("../models/User.model");
 const uploader = require("../middlewares/cloudinary.config")
+
 
 
 //To check User is Logged in -------------------------------------------------------------------->
@@ -161,7 +161,6 @@ router.post("/home/create-steps", (req, res) => {
       });
     });
 });
-
 
 router.delete('/home/:stepsId', (req, res) => {
   StepModel.findByIdAndDelete(req.params.stepsId)
