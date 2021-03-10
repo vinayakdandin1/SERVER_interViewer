@@ -1,18 +1,9 @@
 const router = require("express").Router();
-<<<<<<< HEAD
-let JobModel = require("../models/Job.model");
-let StepModel = require("../models/Step.model");
-let UserModel = require("../models/User.model");
-=======
+
 let JobModel = require("../models/Job.model")
 let StepModel = require("../models/Step.model")
 let UserModel = require("../models/User.model")
-<<<<<<< HEAD
-const uploader = require("../middlewares/cloudinary.config")
 
-=======
->>>>>>> origin/vinayak
->>>>>>> origin/zelimhan
 
 //To check User is Logged in -------------------------------------------------------------------->
 const isLoggedIn = (req, res, next) => {
@@ -170,11 +161,8 @@ router.post("/home/create-steps", (req, res) => {
     });
 });
 
-<<<<<<< HEAD
-router.delete("/home/:stepsId", (req, res) => {
-=======
+
 router.delete('/home/:stepsId', (req, res) => {
->>>>>>> origin/vinayak
   StepModel.findByIdAndDelete(req.params.stepsId)
     .then((response) => {
       res.status(200).json(response);
@@ -239,26 +227,6 @@ router.get("/home/:jobId", isLoggedIn, (req, res, next) => {
 router.patch("/home/:jobId", isLoggedIn, (req, res, next) => {
   let id = req.params.jobId;
   const {
-<<<<<<< HEAD
-    jobTitle,
-    companyName,
-    applicationDate,
-    contactPerson,
-    contactDetail,
-    jobDescription,
-    companyRating,
-    applicationLink,
-    sourceOfApplication,
-    resume,
-    salary,
-    interviewDate,
-    jobLocation,
-  } = req.body;
-  JobModel.findByIdAndUpdate(
-    id,
-    {
-=======
->>>>>>> origin/vinayak
       jobTitle,
       companyName,
       applicationDate,
@@ -271,15 +239,9 @@ router.patch("/home/:jobId", isLoggedIn, (req, res, next) => {
       salary,
       interviewDate,
       jobLocation,
-<<<<<<< HEAD
-    },
-    { new: true }
-  )
-=======
     } = req.body;
   JobModel.findByIdAndUpdate(id, {jobTitle,companyName, applicationDate, contactPerson,contactDetail, 
         jobDescription, companyRating, applicationLink, sourceOfApplication, salary, interviewDate,  jobLocation}, { new: true })
->>>>>>> origin/vinayak
     .then((response) => {
       res.status(200).json(response);
     })
