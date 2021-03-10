@@ -38,6 +38,12 @@ router.get("/home", isLoggedIn, (req, res, next) => {
   });
 });
 
+router.get("/referrals", isLoggedIn, (req, res, next) => {
+  let user = req.session.user._id;
+
+  
+});
+
 // Get route to show dashboard of the user with job list on left and form on right -------------->
 router.get("/dashboard", isLoggedIn, (req, res, next) => {
   let user = req.session.user._id;
