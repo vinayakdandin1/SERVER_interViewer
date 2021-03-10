@@ -1,12 +1,8 @@
 const router = require("express").Router();
-let JobModel = require("../models/Job.model")
-let StepModel = require("../models/Step.model")
-let UserModel = require("../models/User.model")
+let JobModel = require("../models/Job.model");
+let StepModel = require("../models/Step.model");
+let UserModel = require("../models/User.model");
 const uploader = require("../middlewares/cloudinary.config")
-
-
-
-
 
 
 
@@ -25,10 +21,10 @@ const isLoggedIn = (req, res, next) => {
 
 // Get route of Home page where welcome user and upcoming interviews will be displayed ---------->
 
-router.get('/user', isLoggedIn, (req, res, next) => {
-  let user = req.sessions.user
+router.get("/user", isLoggedIn, (req, res, next) => {
+  let user = req.sessions.user;
   res.status(200).json(user);
-})
+});
 
 router.get("/home", isLoggedIn, (req, res, next) => {
   let user = req.session.user._id;
@@ -59,8 +55,9 @@ router.get("/dashboard", isLoggedIn, (req, res, next) => {
     });
 });
 // GET route to show a preview from the job offers from the dashboard---------------------------->
+
 router.get("/dashboard/:jobId", isLoggedIn, (req, res, next) => {
-  let jobId = req.params.jobId
+  let jobId = req.params.jobId;
   JobModel.findById(jobId)
     .then((singleJob) => {
       res.status(200).json(singleJob);
@@ -107,7 +104,7 @@ router.post("/create", (req, res, next) => {
     salary,
     interviewDate,
     jobLocation,
-    userId: result._id
+    userId: result._id,
   };
 
   JobModel.create(newJobPost)
@@ -140,48 +137,48 @@ router.post("/create", (req, res, next) => {
 router.get("/home/steps", (req, res) => {
   StepModel.find()
     .then((steps) => {
-      res.status(200).json(steps)
+      res.status(200).json(steps);
     })
     .catch((err) => {
       res.status(500).json({
-        error: 'Something went wrong with steps',
-        message: err
-      })
-    })
-})
+        error: "Something went wrong with steps",
+        message: err,
+      });
+    });
+});
 
 router.post("/home/create-steps", (req, res) => {
-  const {date, description, jobId} = req.body
+  const { date, description, jobId } = req.body;
 
-  StepModel.create({date, description, jobId})
+  StepModel.create({ date, description, jobId })
     .then((response) => {
       res.status(200).json(response);
     })
     .catch((err) => {
       res.status(500).json({
         error: "Something went wrong with create step",
-        message: err
-    })
-    })
-})
+        message: err,
+      });
+    });
+});
 
 router.delete('/home/:stepsId', (req, res) => {
   StepModel.findByIdAndDelete(req.params.stepsId)
-        .then((response) => {
-             res.status(200).json(response)
-        })
-        .catch((err) => {
-             res.status(500).json({
-                  error: 'Something went wrong',
-                  message: err
-             })
-        })  
-})
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: "Something went wrong",
+        message: err,
+      });
+    });
+});
 
 // Delete path for deleting a job listing from user's listing ----------------------------------------------------->
 router.delete("/home/job/:jobId", isLoggedIn, (req, res, next) => {
   let id = req.params.jobId;
- 
+
   JobModel.findByIdAndDelete(id)
     .then((response) => {
       res.status(200).json(response);
@@ -197,7 +194,7 @@ router.delete("/home/job/:jobId", isLoggedIn, (req, res, next) => {
 router.delete("/home/steps/:jobId", isLoggedIn, (req, res, next) => {
   let id = req.params.jobId;
 
-  StepModel.deleteMany({jobId: id})
+  StepModel.deleteMany({ jobId: id })
     .then((response) => {
       res.status(200).json(response);
     })
@@ -206,9 +203,8 @@ router.delete("/home/steps/:jobId", isLoggedIn, (req, res, next) => {
         error: "Something went wrong",
         message: err,
       });
-    })
-} )
-
+    });
+});
 
 //get route to display individual job dynamically which contains all the details and the status component ------------->
 router.get("/home/:jobId", isLoggedIn, (req, res, next) => {
@@ -240,7 +236,6 @@ router.patch("/home/:jobId", isLoggedIn, (req, res, next) => {
       companyRating,
       applicationLink,
       sourceOfApplication,
-      resume,
       salary,
       interviewDate,
       jobLocation,
@@ -258,22 +253,19 @@ router.patch("/home/:jobId", isLoggedIn, (req, res, next) => {
     });
 });
 
-
 // Get route to take the user to profile where he can check his detils and a list of user Resumes ------------------>
-router.get("/profile", isLoggedIn,  (req, res, next) => {
+router.get("/profile", isLoggedIn, (req, res, next) => {
+  let user = req.session.user._id;
 
-  let user = req.session.user._id
-
-  UserModel.findOne(user)
-    then((response) => {
-      res.status(200).json(response)
-    })
-    .catch(() => {
-      res.status(500).json({
-        error: "Something went wrong",
-        message: err,
-      });
+  UserModel.findOne(user);
+  then((response) => {
+    res.status(200).json(response);
+  }).catch(() => {
+    res.status(500).json({
+      error: "Something went wrong",
+      message: err,
     });
+  });
 });
 
 // cloudinary resume get & post route
