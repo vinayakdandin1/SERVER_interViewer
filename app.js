@@ -14,6 +14,12 @@ const app = express();
 // ℹ️ This function is getting exported from the config folder. It runs most middlewares
 require('./config')(app);
 
+const multer = require('multer')
+
+const cors = require('cors')
+
+
+
 //---------------------------------------------------------
 // --------YOUR session config has been done here---------
 //---------------------------------------------------------
@@ -35,6 +41,7 @@ app.use(session({
 }));
 
 
+
 // 👇 Start handling routes here
 // Contrary to the views version, all routes are controled from the routes/index.js
 const allRoutes = require('./routes');
@@ -49,6 +56,7 @@ app.use("/api", jobRoutes)
 const cloudinaryRoute = require("./routes/cloudinary.route");
 app.use("/api", cloudinaryRoute)
 
+app.use(cors())
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require('./error-handling')(app);

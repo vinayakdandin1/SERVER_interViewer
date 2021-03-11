@@ -19,7 +19,11 @@ const userSchema = new Schema({
   lastName: {
     type:String
   }, 
-  resume: [String],
+  frontEnd: String,
+  backEnd: String,
+  fullStack: String,
+  gitHub: String,
+  linkedIn: String,
   jobId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'job'

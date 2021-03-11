@@ -2,7 +2,8 @@ const router = require("express").Router();
 let JobModel = require("../models/Job.model")
 let StepModel = require("../models/Step.model")
 let UserModel = require("../models/User.model")
-const uploader = require("../middlewares/cloudinary.config")
+const uploader = require("../middlewares/cloudinary.config");
+const { response } = require("express");
 
 
 //To check User is Logged in -------------------------------------------------------------------->
@@ -282,6 +283,5 @@ router.post('/profil/resume', uploader.single("imageUrl"), isLoggedIn, (req, res
     })
     })
 })
-
 
 module.exports = router;
